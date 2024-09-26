@@ -96,15 +96,26 @@
 const Router = require("./routes/routes")
 const express = require("express");
 const http = require("http");
-
+const connectDB = require("./connection")
 const app = express();
+const {middleware} = require("./middleware/middleware")
+//database connection
+connectDB().then(()=>{
+    console.log('database connected successfully');
+}).catch((err)=>{
+    console.log("databse not connected have some issue"+err);
+})
+
+//define middlreware
+//app.use(middleware);
+app.use(express.urlencoded({extended:true}))
+
+//routes config
+app.use("/api/users",Router);
 
 
-app.use("/",Router);
 
-
-
-
+//server started
 http.createServer(app).listen("7000",()=>{
     console.log("server started");
 });
